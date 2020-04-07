@@ -1,7 +1,7 @@
 Specie | Protein | CDS | Reproduction
 | --- | --- |--- | --- |
 artemia | yes | yes |
-dmag | | |
+dmag | yes | no |
 dpul | yes | no |
 eutex | yes | no |
 lapu | yes | yes |
