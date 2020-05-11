@@ -32,6 +32,6 @@ if __name__ == "__main__":
             name_ref_comp = ref.split('/')[-1]
             name_folder = name_ref_comp.split('.')[0]+ '.' + name_ref_comp.split('.')[1]
             #os.chdir(name_folder) 
-            os.system('blastp -db "'+name_specie_comp+'.db" -query "'+path + '/' +ref+'" -out "'+name_specie + '_' + name_ref_comp+'" -evalue '+evalue+' -word_size '+word+' -outfmt 6')
+            os.system('blastp -db "'+name_specie_comp+'.db" -query "'+path + '/' +ref+'" -out "'+name_specie + '_' + name_ref_comp+'" -evalue '+evalue+' -word_size '+word+' -outfmt 10')
             os.system('mv "'+name_specie + '_' + name_ref_comp + '"  "' + name_folder + '"')
         os.system('rm ' + name_specie_comp + '.db.*')

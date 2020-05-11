@@ -9,7 +9,7 @@ def add_element(dict, key, value):
     dict[key] = dict[key] + value.strip()
 
 if __name__ == "__main__":
-    main_folder,protein_folder= (sys.argv[1],sys.argv[2])  # require blast format 3
+    main_folder,protein_folder,coverage= (sys.argv[1],sys.argv[2],sys.argv[3])  # require blast format 3
 
     path_target = main_folder + '*'
     folders = glob.glob(path_target)
@@ -29,27 +29,26 @@ if __name__ == "__main__":
                     infa=infas.readlines()
                     arr=[]
                     for line in infa:
-                        if len(line.strip())!=0:
-                            arr.append('>'+line.split('\t')[1].strip())
+                        if len(line.strip())!=0 and float(line.split(',')[2])>=float(coverage) and '>'+line.split(',')[1]+'|'+line.split(',')[2]+'|'+line.split(',')[10] not in arr:
+                            arr.append('>'+line.split(',')[1]+'|'+line.split(',')[2]+'|'+line.split(',')[10])
                     db_path=path+'/'+protein_folder+specie_name+'_proteins.fa'
                     with open(db_path,'r') as db:
                         lines=db.readlines()
                         flag=0
                         for line in lines:
-                            name = line.split(' ')[0].rstrip()
-                            if line.startswith('>') and name not in arr:
-                                flag=0
-                            elif flag==1 and line.startswith('>') and name in arr:
-                                p_name=name.replace(">", "")
-                                p_name='>'+specie_name+'|'+p_name+'\n'
-                                out.write(p_name)
+                            if line.startswith('>'):
+                                name = line.split(' ')[0].rstrip()
+                                for hit in arr:
+                                    if name == hit.split('|')[0].rstrip():
+                                        flag=1 
+                                        p_name=name.replace(">", "")
+                                        p_name='>'+specie_name+'|'+p_name+'|'+hit.split('|')[1]+'|'+hit.split('|')[2]+'\n'
+                                        out.write(p_name)
+                                        break
+                                    else:
+                                        flag=0
                             elif flag==1:
                                 out.write(line.strip() + '\n')
-                            elif line.startswith('>') and name in arr:
-                                p_name=name.replace(">", "")
-                                p_name='>'+specie_name+'|'+p_name+'\n'
-                                out.write(p_name)
-                                flag=1
         os.chdir(path)
 
 
